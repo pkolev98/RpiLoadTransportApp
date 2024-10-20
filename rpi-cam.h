@@ -45,7 +45,7 @@ public:
 
     void deinit();
 
-    void (*rpiRequestComplete)(uint8_t *rpiBuf, size_t size);
+    std::function<void(uint8_t *, size_t)> rpiRequestComplete;
 
 private:
     RpiCamera() {}

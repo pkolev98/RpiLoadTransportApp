@@ -25,7 +25,7 @@ void RpiCamera::rpiRequestCompleted(Request *request) {
         const FrameMetadata &metadata = fbuf->metadata();
         std::cout << "Request completed for seq : " << std::setw(6) << std::setfill('0') << metadata.sequence << std::endl;
 
-        if (rpiRequestComplete != nullptr) {
+        if (rpiRequestComplete) {
             rpiRequestComplete((uint8_t *)mappedBuffers_[fbuf->planes()[0].fd.get()], (size_t)fbuf->planes()[0].length);
         }
     }
