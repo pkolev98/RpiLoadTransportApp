@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <queue>
 #include <cstdlib>
+#include <mutex>
 
 #include <libcamera/libcamera.h>
 
@@ -50,4 +51,5 @@ private:
     StreamConfiguration streamConfig_;
     std::vector<std::unique_ptr<Request>> requests_;
     std::queue<Request *> freeReqs_;
+    std::mutex requestQueueMutex_;
 };

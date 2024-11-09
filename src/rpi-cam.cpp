@@ -24,7 +24,11 @@ void RpiCamera::rpiRequestCompleted(Request *request) {
     }
 
     request->reuse(Request::ReuseBuffers);
-    freeReqs_.push(request);
+
+    {
+        std::unique_lock<std::mutex> lock(requestQueueMutex_);
+        freeReqs_.push(request);
+    }
 }
 
 int RpiCamera::init() {
@@ -159,14 +163,17 @@ int RpiCamera::start() {
 }
 
 int RpiCamera::processRequest() {
+    Request *req = nullptr;
+    {
+        std::unique_lock<std::mutex> lock(requestQueueMutex_);
+        if(freeReqs_.empty()) {
+            return -1;
+        }
 
-    if(freeReqs_.empty()) {
-        return -1;
+        req = freeReqs_.front();
+        freeReqs_.pop();
     }
-
-    Request *req = freeReqs_.front();
     camera_->queueRequest(req);
-    freeReqs_.pop();
 
     return 0;    
 }
