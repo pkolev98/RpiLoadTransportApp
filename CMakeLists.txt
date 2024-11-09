@@ -14,6 +14,8 @@ set(SOURCES
     src/rpi-arrow-detect.cpp
     src/rpi-cam.cpp
     src/rpi-control.cpp
+    src/rpi-motor.cpp
+    src/rpi-motor-rover.cpp
     )
 
 if(WRITE_VID_DEBUG)
@@ -23,5 +25,6 @@ endif()
 set(OPENCV_VIDEOIO_DEBUG TRUE)
 
 add_executable(ArrowDetect ${SOURCES})
-target_link_libraries(ArrowDetect ${OpenCV_LIBS})
-target_link_libraries(ArrowDetect PkgConfig::LIBCAMERA)
+target_link_libraries(ArrowDetect ${OpenCV_LIBS} PkgConfig::LIBCAMERA pigpio rt)
+#target_link_libraries(ArrowDetect PkgConfig::LIBCAMERA)
+#target_link_libraries(ArrowDetect pigpio)

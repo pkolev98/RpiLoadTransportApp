@@ -5,6 +5,10 @@
 
 #include "rpi-cam.h"
 #include "rpi-arrow-detect.h"
+#include "rpi-motor-rover.h"
+
+#define FRAME_WIDTH 1920
+#define FRAME_HEIGHT 1080
 
 class RpiControl {
 public:
@@ -30,4 +34,5 @@ public:
 private:
     RpiArrowDetect rpiArrowDetect_;
     RpiCamera rpiCamInst_;
+    RpiMotorRover rpiRover_;
 };
