@@ -19,17 +19,9 @@ public:
         NV21
     };
 
-    static void requestComplete(Request *request);
+    RpiCamera() {}
 
     void rpiRequestCompleted(Request *request);
-
-    static RpiCamera *GetInstance() {
-        if (!inst_) {
-            inst_ = new RpiCamera;
-        }
-
-        return inst_;
-    }
 
     int init();
 
@@ -48,7 +40,6 @@ public:
     std::function<void(uint8_t *, size_t)> rpiRequestComplete;
 
 private:
-    RpiCamera() {}
 
     std::unique_ptr<CameraManager> cm_;
     std::shared_ptr<Camera> camera_;
@@ -59,5 +50,4 @@ private:
     StreamConfiguration streamConfig_;
     std::vector<std::unique_ptr<Request>> requests_;
     std::queue<Request *> freeReqs_;
-    static RpiCamera *inst_;
 };

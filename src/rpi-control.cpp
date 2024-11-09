@@ -42,28 +42,26 @@ void RpiControl::camFrameComplete(uint8_t *rpiBuf, size_t size) {
 }
 
 void RpiControl::init() {
-    rpiCamInst_ = RpiCamera::GetInstance();
+    rpiCamInst_.init();
 
-    rpiCamInst_->init();
+    rpiCamInst_.rpiRequestComplete = std::bind(&RpiControl::camFrameComplete, this, std::placeholders::_1, std::placeholders::_2);
 
-    rpiCamInst_->rpiRequestComplete = std::bind(&RpiControl::camFrameComplete, this, std::placeholders::_1, std::placeholders::_2);
-
-    rpiCamInst_->configure(1920, 1080, RpiCamera::RpiCameraFormat::RGB888);
+    rpiCamInst_.configure(1920, 1080, RpiCamera::RpiCameraFormat::RGB888);
     rpiArrowDetect_.setFramesRes(1920, 1080);
-    rpiCamInst_->allocBuffers();
+    rpiCamInst_.allocBuffers();
 }
 
 void RpiControl::start() {
-    rpiCamInst_->start();
+    rpiCamInst_.start();
 }
 
 int RpiControl::processRequest() {
-    return rpiCamInst_->processRequest();
+    return rpiCamInst_.processRequest();
 }
 
 void RpiControl::stop() {
-    rpiCamInst_->stop();
-    rpiCamInst_->deinit();
+    rpiCamInst_.stop();
+    rpiCamInst_.deinit();
 
 #ifdef WRITE_VID_DEBUG
     write_vid();

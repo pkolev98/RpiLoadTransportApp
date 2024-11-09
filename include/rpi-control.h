@@ -29,5 +29,5 @@ public:
 
 private:
     RpiArrowDetect rpiArrowDetect_;
-    RpiCamera *rpiCamInst_;
+    RpiCamera rpiCamInst_;
 };

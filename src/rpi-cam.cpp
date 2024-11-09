@@ -8,13 +8,6 @@
 
 using namespace std::chrono_literals;
 
-RpiCamera *RpiCamera::inst_ = nullptr;
-
-void RpiCamera::requestComplete(Request *request) {
-    RpiCamera *rpiCam = RpiCamera::GetInstance();
-    rpiCam->rpiRequestCompleted(request);
-}
-
 void RpiCamera::rpiRequestCompleted(Request *request) {
     if (request->status() == Request::RequestCancelled)
         return;
@@ -159,8 +152,7 @@ int RpiCamera::allocBuffers() {
 }
 
 int RpiCamera::start() {
-    //std::function<void(Request *)> func = requestComplete;
-    camera_->requestCompleted.connect(requestComplete);
+    camera_->requestCompleted.connect(this, &RpiCamera::rpiRequestCompleted);
     camera_->start();
     
     return 0;
