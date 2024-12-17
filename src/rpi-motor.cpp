@@ -21,7 +21,7 @@ int RpiMotor::moveBackward() {
     gpioWrite(cPins_.gpioIn2, PI_HIGH);
 }
 
-int RpiMotor::setSpeed(unsigned int &speed) {
+int RpiMotor::setSpeed(unsigned int speed) {
     if (speed > 255) {
         speed = 255;
     }

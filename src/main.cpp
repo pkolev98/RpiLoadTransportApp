@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <signal.h>
+
 #include <opencv2/opencv.hpp>
 #include <opencv2/highgui.hpp>
 
@@ -18,6 +20,16 @@ int main() {
     int frame_cnt = 0;
     RpiControl rpiControl;
 
+    // auto sigHandler = [&] (int signum) { 
+    //     rpiControl.stop();
+    //     std::cerr << "Terminate program after stopping safely!" << std::endl;
+    //     exit(signum); 
+    // }
+
+    // signal(SIGINT, sigHandler);
+    // signal(SIGTERM, sigHandler);
+    // signal(SIGSEGV, sigHandler);
+
     rpiControl.init();
 
     rpiControl.start();
@@ -26,7 +38,7 @@ int main() {
         if (rpiControl.processRequest() != -1)
             frame_cnt++;
 
-        if (frame_cnt == 300) {
+        if (frame_cnt == 600) {
             break;
         }
     }

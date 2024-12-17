@@ -3,6 +3,7 @@
 
 #include "rpi-control.h"
 
+#include "rpi-log.h"
 
 #ifdef WRITE_VID_DEBUG
 void RpiControl::write_vid() {
@@ -27,6 +28,7 @@ void RpiControl::write_vid() {
 
 void RpiControl::camFrameComplete(uint8_t *rpiBuf, size_t size) {
     int x = 0, y = 0;
+    static int framesCnt = 0;
     if (rpiBuf == nullptr)
         return;
 
@@ -38,12 +40,21 @@ void RpiControl::camFrameComplete(uint8_t *rpiBuf, size_t size) {
 
     std::cout << "Check for arrow !" << std::endl;
     rpiArrowDetect_.detectArrow(rpiBuf, size, x, y);
+    RPI_LOG("RpiControl", ERROR, "TEST!!!!");
     std::cout << "Is there an arrow : x : " << x << ", y : " << y << std::endl;
 
     RpiMotorRover::MRPoint currentPoint;
     currentPoint.x = x;
     currentPoint.y = y;
-    rpiRover_.addCurrentPoint(currentPoint);
+    // if (currentPoint.x == 0 && framesCnt < 10) {
+    //     std::cout<< "NOT GONNA SEND ARROW POINT" <<std::endl;
+    //     framesCnt++;
+    //     return;
+    // }
+    // framesCnt = 0;
+    if (currentPoint.x != 0) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(33));
+    rpiRover_.addCurrentPoint(currentPoint); }
 }
 
 void RpiControl::init() {
@@ -52,7 +63,7 @@ void RpiControl::init() {
     rpiCamInst_.configure(FRAME_WIDTH, FRAME_HEIGHT, RpiCamera::RpiCameraFormat::RGB888);
     rpiCamInst_.allocBuffers();
 
-    rpiArrowDetect_.setFramesRes(FRAME_WIDTH, FRAME_HEIGHT);
+    rpiArrowDetect_.init(FRAME_WIDTH, FRAME_HEIGHT);
 
     RpiMotorRover::MRPoint targetPoint;
     targetPoint.x = FRAME_WIDTH / 2;
@@ -75,6 +86,7 @@ void RpiControl::stop() {
     rpiCamInst_.deinit();
     rpiRover_.stop();
     rpiRover_.deinit();
+    rpiArrowDetect_.deinit();
 
 #ifdef WRITE_VID_DEBUG
     write_vid();

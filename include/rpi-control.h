@@ -7,8 +7,8 @@
 #include "rpi-arrow-detect.h"
 #include "rpi-motor-rover.h"
 
-#define FRAME_WIDTH 1920
-#define FRAME_HEIGHT 1080
+#define FRAME_WIDTH 1280
+#define FRAME_HEIGHT 720
 
 class RpiControl {
 public:

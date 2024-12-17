@@ -9,19 +9,19 @@
 
 #include "rpi-motor.h"
 
-#define GPIO_17        17 // Raspberry GPIO 17
-#define GPIO_27        27 // Raspberry GPIO 27
-#define GPIO_18_PWM    18 // Raspberry GPIO 18
-#define GPIO_22        22 // Raspberry GPIO 22
-#define GPIO_23        23 // Raspberry GPIO 23
-#define GPIO_19_PWM    19 // Raspberry GPIO 19
+#define GPIO_19        19 // Raspberry GPIO 19
+#define GPIO_13        13 // Raspberry GPIO 13
+#define GPIO_26_PWM    26 // Raspberry GPIO 26
+#define GPIO_6        6 // Raspberry GPIO 6
+#define GPIO_5        5 // Raspberry GPIO 5
+#define GPIO_22_PWM    22 // Raspberry GPIO 22
 
-#define MOTOR_A_IN_1   GPIO_17
-#define MOTOR_A_IN_2   GPIO_27
-#define MOTOR_A_EN     GPIO_18_PWM
-#define MOTOR_B_IN_1   GPIO_22
-#define MOTOR_B_IN_2   GPIO_23
-#define MOTOR_B_EN     GPIO_19_PWM
+#define MOTOR_A_IN_1   GPIO_19
+#define MOTOR_A_IN_2   GPIO_13
+#define MOTOR_A_EN     GPIO_26_PWM
+#define MOTOR_B_IN_1   GPIO_6
+#define MOTOR_B_IN_2   GPIO_5
+#define MOTOR_B_EN     GPIO_22_PWM
 
 #define PWM_FREQUENCY 1000 // In Hz
 

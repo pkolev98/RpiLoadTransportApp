@@ -2,7 +2,7 @@
 
 #include <pigpio.h>
 
-#define DEFAULT_SPEED 100
+#define DEFAULT_SPEED 80
 
 class RpiMotor {
 public:
@@ -19,7 +19,7 @@ public:
 
     int moveBackward();
 
-    int setSpeed(unsigned int &speed);
+    int setSpeed(unsigned int speed);
 
     int stop();
 private:

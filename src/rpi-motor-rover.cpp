@@ -25,7 +25,10 @@ int RpiMotorRover::processThread() {
 
             lock.unlock();
 
-            if ((currentPoint.x < targetPoint_.x) && (currentPoint.x < thresholdPoint.xLeft)) {
+            if (!currentPoint.x && !currentPoint.y) {
+                currentRoverState_ = MRState::MR_IDLE;
+            }
+            else if ((currentPoint.x < targetPoint_.x) && (currentPoint.x < thresholdPoint.xLeft)) {
                 currentRoverState_ = MRState::MR_LEFT;
             }
             else if (((currentPoint.x < targetPoint_.x) && (currentPoint.x >= thresholdPoint.xLeft)) ||
@@ -35,16 +38,12 @@ int RpiMotorRover::processThread() {
             else if ( (currentPoint.x > targetPoint_.x) && (currentPoint.x > thresholdPoint.xRight)) {
                 currentRoverState_ = MRState::MR_RIGHT;
             }
-            else if (!currentPoint.x && !currentPoint.y) {
-                currentRoverState_ = MRState::MR_IDLE;
-            }
 
             lock.lock();
             continue;
         }
 
         lock.unlock();
-
 
         switch (currentRoverState_)
         {
@@ -97,6 +96,10 @@ int RpiMotorRover::init(MRPoint &setTargetPoint) {
 
     leftMotor_.init(controlPinsLeft, 1000);
     rightMotor_.init(controlPinsRight, 1000);
+
+    leftMotor_.setSpeed(80);
+    rightMotor_.setSpeed(80);
+
 
     targetPoint_ = setTargetPoint;
     thresholdPoint.xLeft = targetPoint_.x - 100;
