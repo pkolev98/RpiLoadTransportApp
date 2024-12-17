@@ -39,7 +39,7 @@ void RpiControl::camFrameComplete(uint8_t *rpiBuf, size_t size) {
 #endif
 
     std::cout << "Check for arrow !" << std::endl;
-    rpiArrowDetect_.detectArrow(rpiBuf, size, x, y);
+    rpiArrowDetect_->detectArrow(rpiBuf, size, x, y);
     RPI_LOG("RpiControl", ERROR, "TEST!!!!");
     std::cout << "Is there an arrow : x : " << x << ", y : " << y << std::endl;
 
@@ -54,39 +54,39 @@ void RpiControl::camFrameComplete(uint8_t *rpiBuf, size_t size) {
     // framesCnt = 0;
     if (currentPoint.x != 0) {
     std::this_thread::sleep_for(std::chrono::milliseconds(33));
-    rpiRover_.addCurrentPoint(currentPoint); }
+    rpiRover_->addCurrentPoint(currentPoint); }
 }
 
 void RpiControl::init() {
-    rpiCamInst_.init();
-    rpiCamInst_.rpiRequestComplete = std::bind(&RpiControl::camFrameComplete, this, std::placeholders::_1, std::placeholders::_2);
-    rpiCamInst_.configure(FRAME_WIDTH, FRAME_HEIGHT, RpiCamera::RpiCameraFormat::RGB888);
-    rpiCamInst_.allocBuffers();
+    rpiCamInst_->init();
+    rpiCamInst_->rpiRequestComplete = std::bind(&RpiControl::camFrameComplete, this, std::placeholders::_1, std::placeholders::_2);
+    rpiCamInst_->configure(FRAME_WIDTH, FRAME_HEIGHT, RpiCamera::RpiCameraFormat::RGB888);
+    rpiCamInst_->allocBuffers();
 
-    rpiArrowDetect_.init(FRAME_WIDTH, FRAME_HEIGHT);
+    rpiArrowDetect_->init(FRAME_WIDTH, FRAME_HEIGHT);
 
     RpiMotorRover::MRPoint targetPoint;
     targetPoint.x = FRAME_WIDTH / 2;
     targetPoint.y = FRAME_HEIGHT / 2;
-    rpiRover_.init(targetPoint);
+    rpiRover_->init(targetPoint);
 
 }
 
 void RpiControl::start() {
-    rpiCamInst_.start();
-    rpiRover_.start();
+    rpiCamInst_->start();
+    rpiRover_->start();
 }
 
 int RpiControl::processRequest() {
-    return rpiCamInst_.processRequest();
+    return rpiCamInst_->processRequest();
 }
 
 void RpiControl::stop() {
-    rpiCamInst_.stop();
-    rpiCamInst_.deinit();
-    rpiRover_.stop();
-    rpiRover_.deinit();
-    rpiArrowDetect_.deinit();
+    rpiCamInst_->stop();
+    rpiCamInst_->deinit();
+    rpiRover_->stop();
+    rpiRover_->deinit();
+    rpiArrowDetect_->deinit();
 
 #ifdef WRITE_VID_DEBUG
     write_vid();

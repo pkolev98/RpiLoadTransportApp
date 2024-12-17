@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+message StartRequest {
+  string name = 1;
+}
+
+message StopRequest {
+  string name = 1;
+}
+
+message Reply {
+  string name = 1;
+  int32 result = 2;
+}
+
+service LoadTransportControl {
+  rpc start (StartRequest) returns (Reply) {}
+
+  rpc stop(StopRequest) returns (Reply) {}
+}
