@@ -1,0 +1,14 @@
+[Unit]
+Description=Rpi Load Transport App service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/RpiLoadTransportApp
+Restart=always
+User=root
+Group=root
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
