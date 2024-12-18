@@ -16,4 +16,4 @@ set(OPENCV_VIDEOIO_DEBUG TRUE)
 
 add_library(RpiLoadTransportLib ${RLT_SOURCES})
 add_dependencies(RpiLoadTransportLib LoadTransportControlLib)
-target_link_libraries(RpiLoadTransportLib LoadTransportControlLib ${OpenCV_LIBS} PkgConfig::LIBCAMERA pigpio rt)
+target_link_libraries(RpiLoadTransportLib LoadTransportControlLib ${OpenCV_LIBS} PkgConfig::LIBCAMERA pigpiod_if2 rt pthread)

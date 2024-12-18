@@ -1,24 +1,25 @@
 #include "rpi-motor.h"
 
-int RpiMotor::init(struct ControlPins &pins, int pwmFreq) {
+int RpiMotor::init(struct ControlPins &pins, int pwmFreq, int& pigpiodFd) {
     cPins_ = pins;
+    pigpiodFd_ = pigpiodFd;
 
-    gpioSetMode(cPins_.gpioIn1, cPins_.pinType[0]);
-    gpioSetMode(cPins_.gpioIn2, cPins_.pinType[1]);
-    gpioSetMode(cPins_.enPWM, cPins_.pinType[2]);
+    set_mode(pigpiodFd_, cPins_.gpioIn1, cPins_.pinType[0]);
+    set_mode(pigpiodFd_, cPins_.gpioIn2, cPins_.pinType[1]);
+    set_mode(pigpiodFd_, cPins_.enPWM, cPins_.pinType[2]);
 
-    gpioSetPWMfrequency(cPins_.enPWM, pwmFreq);
-    gpioPWM(cPins_.enPWM, DEFAULT_SPEED);
+    set_PWM_frequency(pigpiodFd_, cPins_.enPWM, pwmFreq);
+    set_PWM_dutycycle(pigpiodFd_, cPins_.enPWM, DEFAULT_SPEED);
 }
 
 int RpiMotor::moveForward() {
-    gpioWrite(cPins_.gpioIn1, PI_HIGH);
-    gpioWrite(cPins_.gpioIn2, PI_LOW);
+    gpio_write(pigpiodFd_, cPins_.gpioIn1, PI_HIGH);
+    gpio_write(pigpiodFd_, cPins_.gpioIn2, PI_LOW);
 }
 
 int RpiMotor::moveBackward() {
-    gpioWrite(cPins_.gpioIn1, PI_LOW);
-    gpioWrite(cPins_.gpioIn2, PI_HIGH);
+    gpio_write(pigpiodFd_, cPins_.gpioIn1, PI_LOW);
+    gpio_write(pigpiodFd_, cPins_.gpioIn2, PI_HIGH);
 }
 
 int RpiMotor::setSpeed(unsigned int speed) {
@@ -26,11 +27,11 @@ int RpiMotor::setSpeed(unsigned int speed) {
         speed = 255;
     }
 
-    gpioPWM(cPins_.enPWM, speed);
+    set_PWM_dutycycle(pigpiodFd_, cPins_.enPWM, speed);
 }
 
 int RpiMotor::stop() {
-    gpioWrite(cPins_.gpioIn1, 0);
-    gpioWrite(cPins_.gpioIn2, 0);
-    gpioPWM(cPins_.enPWM, 0);
+    gpio_write(pigpiodFd_, cPins_.gpioIn1, PI_LOW);
+    gpio_write(pigpiodFd_, cPins_.gpioIn2, PI_LOW);
+    set_PWM_dutycycle(pigpiodFd_, cPins_.enPWM, PI_LOW);
 }

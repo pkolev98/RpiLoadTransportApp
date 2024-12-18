@@ -1,11 +1,12 @@
 #pragma once
 
 #include <thread>
-#include <pigpio.h>
 #include <queue>
 #include <mutex>
 #include <condition_variable>
 #include <atomic>
+
+#include <pigpiod_if2.h>
 
 #include "rpi-motor.h"
 
@@ -81,4 +82,5 @@ private:
     std::condition_variable  pointsQueueCV_;
     std::atomic_bool dataPresent_;
     std::atomic_bool roverRunning_;
+    int pigpiodFd_;
 };

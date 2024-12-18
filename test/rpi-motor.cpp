@@ -8,7 +8,8 @@ int main()
     RpiMotor leftMotor;
     RpiMotor rightMotor;
 
-    if (gpioInitialise() < 0) {
+    int pigpiodFd = pigpio_start(NULL, NULL);
+    if (pigpiodFd < 0) {
         std::cout << "pigpio initialization failed!" << std::endl;
         return -1;
     }
@@ -27,8 +28,8 @@ int main()
                                                 { PI_OUTPUT, PI_OUTPUT, PI_OUTPUT }
                                                };
 
-    leftMotor.init(controlPinsLeft, 1000);
-    rightMotor.init(controlPinsRight, 1000);
+    leftMotor.init(controlPinsLeft, 1000, pigpiodFd);
+    rightMotor.init(controlPinsRight, 1000, pigpiodFd);
 
     leftMotor.moveForward();
     rightMotor.moveForward();
@@ -53,7 +54,7 @@ int main()
     rightMotor.stop();
     leftMotor.stop();
 
-    gpioTerminate();
+    pigpio_stop(pigpiodFd);
 
     return 0;
 }

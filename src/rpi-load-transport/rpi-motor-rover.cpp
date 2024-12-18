@@ -75,8 +75,9 @@ int RpiMotorRover::processThread() {
 }
 
 int RpiMotorRover::init(MRPoint &setTargetPoint) {
-    if (gpioInitialise() < 0) {
-        std::cout << "pigpio initialization failed!" << std::endl;
+    pigpiodFd_ = pigpio_start(NULL, NULL);
+    if (pigpiodFd_ < 0) {
+        std::cout << "pigpio start failed!" << std::endl;
         return -1;
     }
 
@@ -94,8 +95,8 @@ int RpiMotorRover::init(MRPoint &setTargetPoint) {
                                                 { PI_OUTPUT, PI_OUTPUT, PI_OUTPUT }
                                                };
 
-    leftMotor_.init(controlPinsLeft, 1000);
-    rightMotor_.init(controlPinsRight, 1000);
+    leftMotor_.init(controlPinsLeft, 1000, pigpiodFd_);
+    rightMotor_.init(controlPinsRight, 1000, pigpiodFd_);
 
     leftMotor_.setSpeed(80);
     rightMotor_.setSpeed(80);
@@ -111,7 +112,7 @@ int RpiMotorRover::init(MRPoint &setTargetPoint) {
 }
 
 int RpiMotorRover::deinit() {
-    gpioTerminate();
+    pigpio_stop(pigpiodFd_);
     return 0;
 }
 

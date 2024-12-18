@@ -1,6 +1,7 @@
 #pragma once
 
 #include <pigpio.h>
+#include <pigpiod_if2.h>
 
 #define DEFAULT_SPEED 80
 
@@ -13,7 +14,7 @@ public:
         int pinType[3];
     };
 
-    int init(struct ControlPins &pins, int pwmFreq);
+    int init(struct ControlPins &pins, int pwmFreq, int& pigpiodFd_);
 
     int moveForward();
 
@@ -24,4 +25,5 @@ public:
     int stop();
 private:
     struct ControlPins cPins_;
+    int pigpiodFd_;
 };
