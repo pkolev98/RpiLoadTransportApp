@@ -17,7 +17,7 @@ using namespace cv;
 
 int RpiArrowDetect::init(uint32_t frameWidth, uint32_t frameHeight)
 {
-    writeVid_ = cv::VideoWriter("vid.avi", cv::VideoWriter::fourcc('M','J','P','G'), 30, cv::Size(frameWidth, frameHeight));
+    writeVid_ = cv::VideoWriter("/tmp/vid.avi", cv::VideoWriter::fourcc('M','J','P','G'), 30, cv::Size(frameWidth, frameHeight));
     writeVidContours_ = cv::VideoWriter("vidContours.avi", cv::VideoWriter::fourcc('M','J','P','G'), 30, cv::Size(frameWidth, frameHeight));
 
     width_ = frameWidth;
