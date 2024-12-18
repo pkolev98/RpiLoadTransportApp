@@ -14,13 +14,13 @@ Build:
 Run the RpiLoadTransportApp service:
 - pigpiod should be started - Daemon, which uses the gpios of the Rpi.
 - Copy build/src/RpiLoadTransportApp to /usr/local/bin/
-	sudo cp RpiLoadTransportApp /usr/local/bin/
+	- sudo cp RpiLoadTransportApp /usr/local/bin/
 - the service file in service/rpi-load-transport.service folder should be copied to /etc/systemd/system/
-	sudo cp rpi-load-transport.service /etc/systemd/system/
+	- sudo cp rpi-load-transport.service /etc/systemd/system/
 - After that execute on raspberry pi:
-	sudo systemctl enable rpi-load-transport.service
-	sudo systemctl daemon-reload
-	sudo systemctl restart rpi-load-transport.service.
+	- sudo systemctl enable rpi-load-transport.service
+	- sudo systemctl daemon-reload
+	- sudo systemctl restart rpi-load-transport.service.
 Note: You can optionally reboot the device.
 
 The service is controlled via gRPC from another client application, which gives the start and stop commands
