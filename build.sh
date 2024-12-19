@@ -8,7 +8,7 @@ for arg in $@; do
 done
 
 rm -rf build
-cmake -S . -B build "${WRITE_VID}"
+cmake -Dabsl_DIR=/usr/lib/cmake/absl -S . -B build "${WRITE_VID}"
 cd build
 make -j4
 cd -
