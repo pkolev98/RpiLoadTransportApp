@@ -5,58 +5,6 @@
 
 #include "rpi-log.h"
 
-#ifdef WRITE_VID_DEBUG
-void RpiControl::write_vid() {
-    cv::VideoWriter writeVid("vid.avi", cv::VideoWriter::fourcc('M','J','P','G'), 30, cv::Size(1920, 1080));
-
-    std::cout << "Writing video !" << std::endl;
-
-    while(!camBufs_.empty()) {
-        uint8_t *buf = camBufs_.front();
-        camBufs_.pop();
-
-        cv::Mat cvMat(1080, 1920, CV_8UC3, buf);
-        writeVid.write(cvMat);
-        free(buf);
-    }
-
-    std::cout << "Video vid.avi is ready !" << std::endl;
-
-    writeVid.release();
-}
-#endif
-
-void RpiControl::camFrameComplete(uint8_t *rpiBuf, size_t size) {
-    int x = 0, y = 0;
-    static int framesCnt = 0;
-    if (rpiBuf == nullptr)
-        return;
-
-#ifdef WRITE_VID_DEBUG
-    uint8_t *buf = (uint8_t *)malloc(size * sizeof(uint8_t));
-    memcpy(buf, rpiBuf, size);
-    camBufs_.push(buf);
-#endif
-
-    std::cout << "Check for arrow !" << std::endl;
-    rpiArrowDetect_->detectArrow(rpiBuf, size, x, y);
-    RPI_LOG("RpiControl", ERROR, "TEST!!!!");
-    std::cout << "Is there an arrow : x : " << x << ", y : " << y << std::endl;
-
-    RpiMotorRover::MRPoint currentPoint;
-    currentPoint.x = x;
-    currentPoint.y = y;
-    // if (currentPoint.x == 0 && framesCnt < 10) {
-    //     std::cout<< "NOT GONNA SEND ARROW POINT" <<std::endl;
-    //     framesCnt++;
-    //     return;
-    // }
-    // framesCnt = 0;
-    if (currentPoint.x != 0) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(33));
-    rpiRover_->addCurrentPoint(currentPoint); }
-}
-
 void RpiControl::init() {
     rpiCamInst_->init();
     rpiCamInst_->rpiRequestComplete = std::bind(&RpiControl::camFrameComplete, this, std::placeholders::_1, std::placeholders::_2);
@@ -87,8 +35,4 @@ void RpiControl::stop() {
     rpiRover_->stop();
     rpiRover_->deinit();
     rpiArrowDetect_->deinit();
-
-#ifdef WRITE_VID_DEBUG
-    write_vid();
-#endif
 }

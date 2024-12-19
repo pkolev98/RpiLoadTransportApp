@@ -18,8 +18,18 @@ grpc::Status LoadTransportControlServer::stop(grpc::ServerContext* context, cons
     return grpc::Status::OK;
 }
 
+grpc::Status LoadTransportControlServer::set_mode(grpc::ServerContext* context, const SetModeRequest* request, Reply* response)
+{
+    std::cout << "set mode reuqested!!" << std::endl;
+    bool isManualMode = request->mode() == RLTMode::MANUAL_MODE ? true : false;
+    setMode_(isManualMode);
+
+    return grpc::Status::OK;
+}
+
 void LoadTransportControlServer::setServiceCallbacks(serviceCallbacks& callbacks)
 {
     start_ = callbacks.start;
     stop_ = callbacks.stop;
+    setMode_ = callbacks.setMode;
 }

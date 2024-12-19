@@ -13,7 +13,10 @@ public:
 
     grpc::Status stop(grpc::ServerContext* context, const StopRequest* request, Reply* response) override;
 
+    grpc::Status set_mode(grpc::ServerContext* context, const SetModeRequest* request, Reply* response) override;
+
 private:
     std::function<void(void)> start_;
     std::function<void(void)> stop_;
+    std::function<void(bool isManualMode)> setMode_;
 };

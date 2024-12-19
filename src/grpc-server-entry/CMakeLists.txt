@@ -3,6 +3,9 @@ cmake_minimum_required(VERSION 3.8)
 project(HelloWorld C CXX)
 
 find_package(Threads REQUIRED)
+find_package(absl CONFIG REQUIRED)
+
+#find_package(absl REQUIRED PATHS /usr/local/lib/cmake/absl)
 
  # This branch assumes that gRPC and all its dependencies are already installed
   # on this system, so they can be located by find_package().
@@ -65,4 +68,4 @@ include_directories(.)
 # Add the server executable
 add_library(LoadTransportControlLib load-transport-grpc-server.cpp)
 target_include_directories(LoadTransportControlLib PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-target_link_libraries(LoadTransportControlLib LoadTransportGrpcServerLib)
+target_link_libraries(LoadTransportControlLib PUBLIC LoadTransportGrpcServerLib)

@@ -3,6 +3,8 @@ set(RLT_SOURCES
     rpi-arrow-detect.cpp
     rpi-cam.cpp
     rpi-control.cpp
+    rpi-control-manual.cpp
+    rpi-control-automatic.cpp
     rpi-motor.cpp
     rpi-motor-rover.cpp
     rpi-log.cpp
@@ -16,4 +18,4 @@ set(OPENCV_VIDEOIO_DEBUG TRUE)
 
 add_library(RpiLoadTransportLib ${RLT_SOURCES})
 add_dependencies(RpiLoadTransportLib LoadTransportControlLib)
-target_link_libraries(RpiLoadTransportLib LoadTransportControlLib ${OpenCV_LIBS} PkgConfig::LIBCAMERA pigpiod_if2 rt pthread)
+target_link_libraries(RpiLoadTransportLib PUBLIC LoadTransportControlLib ${OpenCV_LIBS} PkgConfig::LIBCAMERA pigpiod_if2 rt pthread)

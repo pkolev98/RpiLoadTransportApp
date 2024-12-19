@@ -1,5 +1,14 @@
 syntax = "proto3";
 
+enum RLTMode {
+  MANUAL_MODE = 0;
+  AUTOMATIC_MODE = 1;
+}
+
+message SetModeRequest {
+  RLTMode mode = 1;
+}
+
 message StartRequest {
   string name = 1;
 }
@@ -14,6 +23,8 @@ message Reply {
 }
 
 service LoadTransportControl {
+  rpc set_mode (SetModeRequest) returns (Reply) {}
+
   rpc start (StartRequest) returns (Reply) {}
 
   rpc stop(StopRequest) returns (Reply) {}

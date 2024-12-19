@@ -5,4 +5,5 @@
 struct serviceCallbacks {
     std::function<void(void)> start;
     std::function<void(void)> stop;
+    std::function<void(bool isManualMode)> setMode;
 };
