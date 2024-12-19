@@ -15,11 +15,13 @@ int RpiMotor::init(struct ControlPins &pins, int pwmFreq, int& pigpiodFd) {
 int RpiMotor::moveForward() {
     gpio_write(pigpiodFd_, cPins_.gpioIn1, PI_HIGH);
     gpio_write(pigpiodFd_, cPins_.gpioIn2, PI_LOW);
+    set_PWM_dutycycle(pigpiodFd_, cPins_.enPWM, DEFAULT_SPEED);
 }
 
 int RpiMotor::moveBackward() {
     gpio_write(pigpiodFd_, cPins_.gpioIn1, PI_LOW);
     gpio_write(pigpiodFd_, cPins_.gpioIn2, PI_HIGH);
+    set_PWM_dutycycle(pigpiodFd_, cPins_.enPWM, DEFAULT_SPEED);
 }
 
 int RpiMotor::setSpeed(unsigned int speed) {
