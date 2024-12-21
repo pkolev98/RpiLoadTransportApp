@@ -32,4 +32,5 @@ private:
     std::condition_variable runningCV_;
     ServiceState serviceState_;
     bool isManualMode_{false};
+    bool isControlModeSet{false};
 };

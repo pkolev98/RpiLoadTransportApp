@@ -10,5 +10,5 @@ public:
 
     RpiControlAutomatic() = default;
 
-    ~RpiControlAutomatic() = default;
+    ~RpiControlAutomatic() {}
 };

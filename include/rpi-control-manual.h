@@ -8,7 +8,7 @@ class RpiControlManual : public RpiControl {
 public:
     RpiControlManual() = default;
 
-    ~RpiControlManual() = default;
+    ~RpiControlManual() {}
 
     void camFrameComplete(uint8_t *rpiBuf, size_t size) override;
 

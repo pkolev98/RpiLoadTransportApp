@@ -17,6 +17,7 @@ void RpiService::init()
     callbacks_.start = std::bind(&RpiService::onStart, this);
     callbacks_.stop = std::bind(&RpiService::onStop, this);
     callbacks_.setMode = std::bind(&RpiService::onSetMode, this, std::placeholders::_1);
+    serviceState_ = ServiceState::RLT_SERVICE_IDLE;
 
     std::string server_address = "0.0.0.0:50051";
     LoadTransportControlServer service;
@@ -35,11 +36,7 @@ void RpiService::onSetMode(bool isManualMode)
     std::unique_lock<std::mutex> lock(runningMutex_);
     if (serviceState_ == ServiceState::RLT_SERVICE_IDLE) {
         isManualMode_ = isManualMode;
-        if (isManualMode) {
-            rpiControl_ = std::make_unique<RpiControlManual>();        
-        } else {
-            rpiControl_ = std::make_unique<RpiControlAutomatic>();  
-        }
+        isControlModeSet = true;
 
         serviceState_ = ServiceState::RLT_SERVICE_MODE_SET;
     }
@@ -48,10 +45,17 @@ void RpiService::onSetMode(bool isManualMode)
 void RpiService::onStart()
 {
     std::unique_lock<std::mutex> lock(runningMutex_);
-    if (serviceState_ == ServiceState::RLT_SERVICE_MODE_SET) {
+    if ( isControlModeSet && serviceState_ != ServiceState::RLT_SERVICE_RUNNING ) {
+        if ( isManualMode_ ) {
+            rpiControl_ = std::make_unique<RpiControlManual>();
+        } else {
+            rpiControl_ = std::make_unique<RpiControlAutomatic>();
+        }
+
         rpiControl_->init();
         rpiControl_->start();
         serviceState_ = ServiceState::RLT_SERVICE_RUNNING;
+
         bRunning_.store(true);
         runningCV_.notify_one();
     }
@@ -72,12 +76,16 @@ void RpiService::onStop()
 void RpiService::exec()
 {
     while(1) {
+        std::unique_lock<std::mutex> lock(runningMutex_);
+        if (serviceState_ == ServiceState::RLT_SERVICE_RUNNING)
         {
-            std::unique_lock<std::mutex> lock(runningMutex_);
+            lock.unlock();
+            rpiControl_->processRequest();
+            lock.lock();
+        }
+        else
+        {
             runningCV_.wait(lock, [this]( ) { return bRunning_.load(); });
         }
-
-        if (serviceState_ == ServiceState::RLT_SERVICE_RUNNING)
-            rpiControl_->processRequest();
     }
 }

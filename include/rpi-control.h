@@ -38,7 +38,7 @@ public:
     virtual void moveLeft() {};
     virtual void moveRight() {};
 
-    ~RpiControl() {
+    virtual ~RpiControl() {
         rpiArrowDetect_ = nullptr;
         rpiCamInst_ = nullptr;
         rpiRover_ = nullptr;
