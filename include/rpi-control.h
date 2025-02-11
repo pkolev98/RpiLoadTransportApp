@@ -37,6 +37,7 @@ public:
     virtual void moveForward() {};
     virtual void moveLeft() {};
     virtual void moveRight() {};
+    virtual void moveStop() {};
 
     virtual ~RpiControl() {
         rpiArrowDetect_ = nullptr;

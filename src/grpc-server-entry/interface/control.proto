@@ -5,6 +5,13 @@ enum RLTMode {
   AUTOMATIC_MODE = 1;
 }
 
+enum RLTMoveType {
+  MOVE_FORWARD = 0;
+  MOVE_LEFT = 1;
+  MOVE_RIGHT = 2;
+  MOVE_STOP = 3;
+}
+
 message SetModeRequest {
   RLTMode mode = 1;
 }
@@ -17,6 +24,10 @@ message StopRequest {
   string name = 1;
 }
 
+message MoveRequest {
+  RLTMoveType move_type = 1;
+}
+
 message Reply {
   string name = 1;
   int32 result = 2;
@@ -26,6 +37,8 @@ service LoadTransportControl {
   rpc set_mode (SetModeRequest) returns (Reply) {}
 
   rpc start (StartRequest) returns (Reply) {}
+
+  rpc change_movement_type(MoveRequest) returns (Reply) {}
 
   rpc stop(StopRequest) returns (Reply) {}
 }

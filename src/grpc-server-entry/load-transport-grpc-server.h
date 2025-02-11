@@ -15,8 +15,11 @@ public:
 
     grpc::Status set_mode(grpc::ServerContext* context, const SetModeRequest* request, Reply* response) override;
 
+    grpc::Status change_movement_type(grpc::ServerContext* context, const MoveRequest* request, Reply* response) override;
+
 private:
     std::function<void(void)> start_;
     std::function<void(void)> stop_;
     std::function<void(bool isManualMode)> setMode_;
+    std::function<void(RpiControlMovementTypes)> changeMovementType_;
 };

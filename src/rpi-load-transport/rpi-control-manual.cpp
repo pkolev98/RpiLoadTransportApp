@@ -28,3 +28,7 @@ void RpiControlManual::moveLeft() {
 void RpiControlManual::moveRight() {
     rpiRover_->addCurrentPoint(rightPoint);
 }
+
+void RpiControlManual::moveStop() {
+    rpiRover_->motorsStop();
+}

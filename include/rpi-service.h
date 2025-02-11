@@ -24,6 +24,7 @@ private:
     void onStart();
     void onStop();
     void onSetMode(bool isManualMode);
+    void onChangeMovementType(RpiControlMovementTypes moveType);
 
     serviceCallbacks callbacks_;
     std::unique_ptr<RpiControl> rpiControl_;

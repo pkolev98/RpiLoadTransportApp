@@ -31,8 +31,8 @@ int RpiMotorRover::processThread() {
             else if ((currentPoint.x < targetPoint_.x) && (currentPoint.x < thresholdPoint.xLeft)) {
                 currentRoverState_ = MRState::MR_LEFT;
             }
-            else if (((currentPoint.x < targetPoint_.x) && (currentPoint.x >= thresholdPoint.xLeft)) ||
-                     ((currentPoint.x > targetPoint_.x) && (currentPoint.x <= thresholdPoint.xRight))) {
+            else if (((currentPoint.x <= targetPoint_.x) && (currentPoint.x >= thresholdPoint.xLeft)) ||
+                     ((currentPoint.x >= targetPoint_.x) && (currentPoint.x <= thresholdPoint.xRight))) {
                 currentRoverState_ = MRState::MR_FORWARD;
             }
             else if ( (currentPoint.x > targetPoint_.x) && (currentPoint.x > thresholdPoint.xRight)) {

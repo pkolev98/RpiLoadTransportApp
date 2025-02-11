@@ -60,13 +60,13 @@ public:
 
     int addCurrentPoint(const MRPoint &point);
 
+    int motorsStop();
+
     int stop();
 
     int deinit();
 private:
     int processThread();
-
-    int motorsStop();
 
     int turnLeft();
 

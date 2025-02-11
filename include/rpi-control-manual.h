@@ -15,4 +15,5 @@ public:
     void moveForward() override;
     void moveLeft() override;
     void moveRight() override;
+    void moveStop() override;
 };

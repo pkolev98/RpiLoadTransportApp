@@ -27,9 +27,36 @@ grpc::Status LoadTransportControlServer::set_mode(grpc::ServerContext* context, 
     return grpc::Status::OK;
 }
 
+grpc::Status LoadTransportControlServer::change_movement_type(grpc::ServerContext* context, const MoveRequest* request, Reply* response)
+{
+    std::cout << "change movement type reuqested!!" << std::endl;
+
+    RpiControlMovementTypes RpiType;
+
+    switch (request->move_type()) {
+        case RLTMoveType::MOVE_FORWARD:
+            RpiType = RpiControlMovementTypes::RPI_MOVE_FORWARD;
+            break;
+        case RLTMoveType::MOVE_RIGHT:
+            RpiType = RpiControlMovementTypes::RPI_MOVE_RIGHT;
+            break;
+        case RLTMoveType::MOVE_LEFT:
+            RpiType = RpiControlMovementTypes::RPI_MOVE_LEFT;
+            break;
+        case RLTMoveType::MOVE_STOP:
+            RpiType = RpiControlMovementTypes::RPI_MOVE_STOP;
+            break;
+    }
+
+    changeMovementType_(RpiType);
+
+    return grpc::Status::OK;
+}
+
 void LoadTransportControlServer::setServiceCallbacks(serviceCallbacks& callbacks)
 {
     start_ = callbacks.start;
     stop_ = callbacks.stop;
     setMode_ = callbacks.setMode;
+    changeMovementType_ = callbacks.changeMovementType;
 }

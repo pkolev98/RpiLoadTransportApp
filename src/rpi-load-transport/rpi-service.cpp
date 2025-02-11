@@ -17,6 +17,7 @@ void RpiService::init()
     callbacks_.start = std::bind(&RpiService::onStart, this);
     callbacks_.stop = std::bind(&RpiService::onStop, this);
     callbacks_.setMode = std::bind(&RpiService::onSetMode, this, std::placeholders::_1);
+    callbacks_.changeMovementType = std::bind(&RpiService::onChangeMovementType, this, std::placeholders::_1);
     serviceState_ = ServiceState::RLT_SERVICE_IDLE;
 
     std::string server_address = "0.0.0.0:50051";
@@ -58,6 +59,26 @@ void RpiService::onStart()
 
         bRunning_.store(true);
         runningCV_.notify_one();
+    }
+}
+
+void RpiService::onChangeMovementType(RpiControlMovementTypes moveType) {
+    std::unique_lock<std::mutex> lock(runningMutex_);
+    if ( isControlModeSet && ( serviceState_ == ServiceState::RLT_SERVICE_RUNNING)  && isManualMode_ ) {
+        switch (moveType) {
+            case RpiControlMovementTypes::RPI_MOVE_FORWARD:
+                rpiControl_->moveForward();
+                break;
+            case RpiControlMovementTypes::RPI_MOVE_RIGHT:
+                rpiControl_->moveRight();
+                break;
+            case RpiControlMovementTypes::RPI_MOVE_LEFT:
+                rpiControl_->moveLeft();
+                break;
+            case RpiControlMovementTypes::RPI_MOVE_STOP:
+                rpiControl_->moveStop();
+                break;
+        }
     }
 }
 
